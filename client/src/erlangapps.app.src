@@ -1,0 +1,11 @@
+% -*- Erlang -*-
+{application, erlangapps, [
+			   {description, "todo"},
+			   {vsn, "0.1"},
+			   {registered, []},
+			   {modules, [erlangapps_app, erlangapps_sup, erlangapps_master, epps]},
+			   {applications, [kernel, stdlib]},
+			   {included_applications, []},
+			   {mod, {erlangapps_app, []}},
+			   {env, []}
+			   ]}.

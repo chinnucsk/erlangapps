@@ -1,0 +1,4 @@
+*.beam
+*.app
+client/bin/*
+erlangapps_server/dev

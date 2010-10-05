@@ -1,0 +1,67 @@
+#!/usr/bin/env escript
+%% -*- mode:erlang;tab-width:4;erlang-indent-level:4;indent-tabs-mode:nil -*-
+%% ex: ft=erlang ts=4 sw=4 et
+
+main(_Args) ->
+    %% ensure ebin exists
+    file:make_dir("ebin"),
+    %% Compile all src/*.erl to ebin
+    case make:files(filelib:wildcard("src/*.erl"), [{outdir, "ebin"}, {i, "include"}]) of
+        up_to_date ->
+            ok;
+        error ->
+            io:format("Failed to compile erlangapps files!\n"),
+            halt(1)
+    end,
+
+    %% Copy .app.src file to ebin
+    {ok, _} = file:copy("src/erlangapps.app.src", "ebin/erlangapps.app"),
+    %% Make sure file:consult can parse the .app file
+    case file:consult("ebin/erlangapps.app") of
+        {ok, _} ->
+            ok;
+        {error, Reason} ->
+            io:format("Invalid syntax in ebin/erlangapps.app: ~p\n", [Reason]),
+            halt(1)
+    end,
+
+    %% Add ebin/ to our path
+    true = code:add_path("ebin"),
+
+    %% Read the contents of the files in ebin; note that we place all
+    %% the beam files at the top level of the code archive so that
+    %% code loading works properly.
+    Files = load_files("*", "ebin"),
+
+    case zip:create("mem", Files, [memory]) of
+        {ok, {"mem", ZipBin}} ->
+            %% Archive was successfully created. Prefix that binary with our
+            %% header and write to "epps" file
+            Script = <<"#!/usr/bin/env escript\n", ZipBin/binary>>,
+	    file:make_dir("bin"),
+            case file:write_file("bin/epps", Script) of
+                ok ->
+                    ok;
+                {error, WriteError} ->
+                    io:format("Failed to write epps script: ~p\n", [WriteError]),
+                    halt(1)
+            end;
+        {error, ZipError} ->
+            io:format("Failed to construct epps script archive: ~p\n", [ZipError]),
+            halt(1)
+    end,
+
+    %% Finally, update executable perms for our script
+    [] = os:cmd("chmod u+x bin/epps"),
+
+    %% Add a helpful message
+    io:format("Finished!\n").
+
+load_files(Wildcard, Dir) ->
+    [read_file(Filename, Dir) || Filename <- filelib:wildcard(Wildcard, Dir)].
+
+read_file(Filename, Dir) ->
+    {ok, Bin} = file:read_file(filename:join(Dir, Filename)),
+    {Filename, Bin}.
+
+

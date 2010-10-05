@@ -1,0 +1,11 @@
+%% -*- tab-width: 4;erlang-indent-level: 4;indent-tabs-mode: nil -*-
+%% ex: ts=4 sw=4 et
+{application, erlangapps_server, [
+			   {description, "todo"},
+			   {vsn, "0.1"},
+			   {registered, []},
+			   {applications, [kernel, stdlib, crypto, sasl, webmachine, inets]},
+			   {included_applications, []},
+			   {mod, {erlangapps_server_app, []}},
+			   {env, []}
+			   ]}.
