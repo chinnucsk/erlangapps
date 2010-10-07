@@ -43,11 +43,7 @@ init(noargs) ->
 
 handle_call({Cmd, Args, Cfg}, From, State) ->
     Mod = list_to_atom("epps_op_" ++ Cmd),
-    {Reply, NewState} = try Mod:do(Args, Cfg, From, State)
-        catch _Pattern -> % TODO: catch function clause properly here
-            ?PRINT("check ~p~n", [_Pattern]),
-            ?PRINT("ohoh~n")
-    end,
+    {Reply, NewState} = Mod:do(Args, Cfg, From, State),
     {reply, Reply, NewState}.
 
 handle_cast(not_supported, State) ->
