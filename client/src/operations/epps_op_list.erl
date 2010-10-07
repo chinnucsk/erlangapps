@@ -28,13 +28,20 @@ do(_Args, Cfg, _From, State) ->
 %%% Internal functions 
 %%%===================================================================
 local(State) ->
-    Apps = lists:map(
-	     fun(A) ->
-		     {ok, [{application, Name, Cfg}]} = file:consult(A),
-		     Vsn = proplists:get_value(vsn, Cfg),
-		     {Name, Vsn}
-	     end,
-         filelib:wildcard(epps_utils:get_config(lib_dir) ++ "/*/ebin/*.app")),
+    LibPath = epps_utils:get_config(lib_dir), 
+    Apps = lists:foldl(
+        fun(Path, Acc) ->
+            case lists:prefix(LibPath, Path) of
+                true ->
+                    [AppFile] = filelib:wildcard(filename:join([Path, "*.app"])),
+                    {ok, [{application, Name, Cfg}]} = file:consult(AppFile),
+                    Vsn = proplists:get_value(vsn, Cfg),
+                    [{Name, Vsn} | Acc];
+                false -> Acc
+            end 
+        end,
+        [],
+        code:get_path()),
     ?PRINT("~n -- Locally Installed Applications -- ~n~n"),
     [?PRINT("~p (~s)~n", [Name, Vsn]) || {Name, Vsn} <- Apps],
     ?PRINT("~n"),
