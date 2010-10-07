@@ -11,7 +11,7 @@
 -define(PRINT(Msg), ?PRINT(Msg, [])).
 
 -define(DEFAULT_LIB_DIR, "/usr/local/lib/erlangapps").
--define(DEFAULT_SERVER, "apps.erlangapps.org:5929").
+-define(DEFAULT_SERVER, "http://apps.erlangapps.org:5929").
 -define(API_PATH, "/api").
 -define(LOCAL_SETTINGS_FILE, filename:join([os:getenv("HOME"), ".erlangapps"])).
 -define(API_TOKEN_FILE, filename:join([os:getenv("HOME"), ".erlangapps_token"])).
