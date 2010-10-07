@@ -6,7 +6,8 @@ main(_Args) ->
     %% ensure ebin exists
     file:make_dir("ebin"),
     %% Compile all src/*.erl to ebin
-    case make:files(filelib:wildcard("src/*.erl"), [{outdir, "ebin"}, {i, "include"}]) of
+    SrcFiles = filelib:fold_files("src", ".+\.erl$", true, fun(F, A) -> [F]++A end, []),
+    case make:files(SrcFiles, [{outdir, "ebin"}, {i, "include"}]) of
         up_to_date ->
             ok;
         error ->
