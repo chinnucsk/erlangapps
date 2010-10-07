@@ -30,11 +30,11 @@ main([Cmd | Args0]) ->
 execute("help", _, _) -> usage(0);
 
 execute(Cmd, Args, Cfg) ->
+    ok = application:start(inets),
 	ok = application:start(erlangapps),
     try epps_master:execute(Cmd, Args, Cfg) catch 
         exit:{{undef, [{_, do, _}|_]}, _} -> usage()
-    end,
-	application:stop(erlangapps).
+    end.
 
 get_configuration(Args) -> get_configuration(Args, {[], []}).
 get_configuration([], Res) -> Res;

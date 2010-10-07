@@ -8,9 +8,10 @@
                           epps_master, 
                           epps,
                           epps_utils,
-                          epps_op_list
+                          epps_op_list,
+                          epps_op_search
                       ]},
-			   {applications, [kernel, stdlib]},
+			   {applications, [kernel, stdlib, inets]},
 			   {included_applications, []},
 			   {mod, {erlangapps_app, []}},
 			   {env, []}
