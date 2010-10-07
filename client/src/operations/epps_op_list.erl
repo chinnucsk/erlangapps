@@ -6,7 +6,7 @@
 %%% @end
 %%% Created : 23 Sep 2010 by Tino Breddin <tino.breddin@erlang-solutions.com>
 %%%-------------------------------------------------------------------
--module(epps_do_list).
+-module(epps_op_list).
 
 %% API
 -export([do/4]).
