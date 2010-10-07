@@ -48,7 +48,8 @@ local(State) ->
     {ok, State}.
 		     
 remote(#state{api_url=ApiUrl}=State) ->
-    Apps = epps_utils:request(?URL(ApiUrl)),
+    Response = epps_utils:request(?URL(ApiUrl)),
+    Apps = Response, %FIXME: should we use json instead of Erlang term format?
     ?PRINT("~n -- Available Applications -- ~n~n"),
     [?PRINT("~p (~s)~n", [Name, Vsn]) || {Name, Vsn} <- Apps],
     ?PRINT("~n"),
