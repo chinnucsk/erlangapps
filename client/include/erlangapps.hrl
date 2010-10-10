@@ -16,6 +16,4 @@
 -define(LOCAL_SETTINGS_FILE, filename:join([os:getenv("HOME"), ".erlangapps"])).
 -define(API_TOKEN_FILE, filename:join([os:getenv("HOME"), ".erlangapps_token"])).
 
--define(PUBLISH_URL, "http://127.0.0.1:7777/api/app").
-
 -record(state, {api_url}).
