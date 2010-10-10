@@ -48,6 +48,7 @@ to_json(Req, Context) ->
     Path = wrq:disp_path(Req),
     Response = case Path of 
         "list" -> eas_app:list();
+        "search" -> search(Req);
         _ -> not_known
     end,
     {mochijson2:encode(Response), Req, Context}.
@@ -56,3 +57,8 @@ process_post(Req, Context) ->
     _Zip = wrq:req_body(Req),
     {true, Req, Context}. 
 
+search(Req) ->
+    case wrq:get_qs_value("pattern", Req) of
+        undefined -> {error, {missing_parameter, pattern}};
+        Pattern -> eas_app:search(Pattern)
+    end.
