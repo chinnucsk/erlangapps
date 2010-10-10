@@ -21,7 +21,6 @@ main([Cmd | Args0]) ->
     error_logger:tty(false),
     load_local_config(),
     {Args, Cfg} = get_configuration(Args0),
-    erlang:display({cmd, Cmd, args, Args, cfg, Cfg}),
     execute(Cmd, Args, Cfg).
 
 %%%===================================================================
