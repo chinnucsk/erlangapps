@@ -4,6 +4,10 @@
 * client should use the server to resolve the dependencies, then fetch those needed into the lib directory
 * client should invoke rebar (or some other build tool) to build the dependencies once downloaded 
 
+* Maintainer submits git/hg/* URLs to the server. Further metadata is pulled by server from the provided source.
+* The list of URLs (and latest metadata) is stored in a git repo to ensure that the accumulated DB is accessible by other code/people.
+* Server periodically polls the URLs for metadata and latest dependency data; this is used to construct the dependency tree.
+
 # (Proposed) Client Usage #
 
 * epps install APP
